@@ -21,6 +21,7 @@ export class InventoryPage{ // pongo todo lo que contiene la pagina de inventari
     readonly activeSortOption: Locator;
     readonly sortOptions: Locator;
     readonly productImages: Locator;
+    readonly productPrices: Locator;
 
    
     constructor(page: Page ) { // incializo la pagina con los identificadores de los elementos
@@ -42,6 +43,7 @@ export class InventoryPage{ // pongo todo lo que contiene la pagina de inventari
         this.activeSortOption = page.locator('.active_option');
         this.sortOptions = page.locator('[data-test="product_sort_container"] option'); // all <option> elements
         this.productImages = page.locator('.inventory_item_img');
+        this.productPrices = page.locator('.inventory_item_price'); // all product price elements
 
     }
 

@@ -84,8 +84,17 @@ test('User is able to filter items: price, name', async ({ page }) => {
   const sortedNamesZA = [...itemNames].sort((a, b) => b.localeCompare(a));
   expect(itemNamesZA).toEqual(sortedNamesZA);
   //sort by price low to high
-  await inventoryPage.selectSortOption('lohi'); // TODO
-  const itemPrices = await inventoryPage.productNames.allTextContents();
+  await inventoryPage.selectSortOption('lohi'); 
+  const itemPrices = await inventoryPage.productPrices.allTextContents();
+  const numericPriceLohi = itemPrices.map(price => parseFloat(price.replace('$', '')));
+  const sortedPricesLohi = [...numericPriceLohi].sort((a, b) => a - b);// asserting that they are sorted low to high
+  expect(numericPriceLohi).toEqual(sortedPricesLohi);
+  //sort by price high to low
+  await inventoryPage.selectSortOption('hilo');
+  const itemPricesHilo = await inventoryPage.productPrices.allTextContents();
+  const numericPriceHilo = itemPricesHilo.map(price => parseFloat(price.replace('$', '')));
+  const sortedPricesHilo = [...numericPriceHilo].sort((a, b) => b - a); // asserting that they are sorted high to low
+  expect(numericPriceHilo).toEqual(sortedPricesHilo);
 
 
 })
