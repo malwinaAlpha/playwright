@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/login_page'; //import { test, expect } from '@playwright/test';
 import { InventoryPage } from '../pages/inventory_page';
-import { Products } from '../products.strings';
+
 
 
 

@@ -100,3 +100,23 @@ test('User is able to filter items: price, name', async ({ page }) => {
 })
 
 });
+
+test('the error user cannot remove item from the product page', async ({ page }) => {
+  const loginPage = new LoginPage(page);
+  const inventoryPage = new InventoryPage(page); 
+
+  await loginPage.goto();
+  await loginPage.isVisible();
+  await loginPage.login('error_user', 'secret_sauce');
+  await expect(page).toHaveTitle('Swag Labs');
+  await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html');
+  await expect(inventoryPage.inventorySingleCard).toHaveCount(6);
+  await expect(inventoryPage.removeButton).toBeHidden();
+  await expect(inventoryPage.addToCartButton).toBeVisible();
+  await inventoryPage.addItemToCart();
+  await expect(inventoryPage.removeButton).toBeVisible();
+  await inventoryPage.removeButton.click();
+  await expect(inventoryPage.removeButton).toBeVisible();
+  await expect(inventoryPage.shoppingCartBadge).toHaveText('1');
+
+});

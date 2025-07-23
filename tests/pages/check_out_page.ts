@@ -9,6 +9,10 @@ export class CheckOutPage {
     readonly cancelButton: Locator;
     readonly finishButton: Locator;
     readonly backHomeButton: Locator;
+    readonly itemPrice: Locator;
+    readonly itemTotal: Locator;    
+    readonly taxTotal: Locator;
+    readonly totalPrice: Locator;
  
     constructor (page: Page) {
         this.page = page;
@@ -19,7 +23,10 @@ export class CheckOutPage {
         this.cancelButton = page.locator('#cancel');
         this.finishButton = page.locator('#finish');
         this.backHomeButton = page.locator('#back-to-products');
-
+        this.itemPrice = page.locator('.inventory_item_price'); // individual price of each item
+        //this.itemTotal = page.locator('.summary_subtotal_label');// sum of items no tax included
+        this.taxTotal = page.locator('.summary_tax_label');// the tax
+        this.totalPrice = page.locator('.summary_total_label');// total price including tax
     }
 
     async fillFirstName(string){
