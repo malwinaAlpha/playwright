@@ -25,13 +25,13 @@ test('the locked out user tries to login', async ({ page }) => {
   await expect(loginPage.errorMesaageOutput).toHaveText('Epic sadface: Sorry, this user has been locked out.');
 });
 
-test('the problem user sees incorrect, duplicated product images on the inventory page', async ({ page }) => {
+test.fail('the problem user sees incorrect, duplicated product images on the inventory page', async ({ page }) => {
   const loginPage = new LoginPage(page); 
   const inventoryPage = new InventoryPage(page);
 
   await loginPage.goto();
   await loginPage.isVisible();
-  await loginPage.login('locked_out_user', 'secret_sauce');
+  await loginPage.login('problem_user', 'secret_sauce');
   await inventoryPage.verifyNoDuplicateImages();
 });
 
