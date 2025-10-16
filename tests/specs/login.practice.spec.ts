@@ -4,7 +4,6 @@ import { InventoryPage } from "../../pages/inventory_page";
 import { loginAsStandardUser } from "../../helpers/standardUserLogin";
 
 test("the user can login and does not see duplicates", async ({ page }) => {
-  const loginPage = new LoginPage(page);
   const inventoryPage = new InventoryPage(page);
 
   await loginAsStandardUser(page); //helper function usage
@@ -27,7 +26,10 @@ test("the locked out user cannot log in - error message is displayed", async ({
 
 test.fail(
   "the problem user sees incorrect, duplicated product images on the inventory page",
-  async ({ page }) => {
+  async ({
+    //Run this test, but expect it to fail.
+    page,
+  }) => {
     const loginPage = new LoginPage(page);
     const inventoryPage = new InventoryPage(page);
 

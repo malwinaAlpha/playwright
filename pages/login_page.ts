@@ -16,7 +16,7 @@ export class LoginPage {
   }
 
   async isVisible() {
-    //await this.page.waitForURL('https://www.saucedemo.com/'); // I have change if from 'waitforUrl' to toHaveURL
+    //await this.page.waitForURL('https://www.saucedemo.com/');
     await this.page.getByText("Username").isVisible();
     await this.page.getByText("Password").isVisible();
     await this.page.getByRole("button", { name: "Login" }).isVisible();

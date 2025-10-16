@@ -5,6 +5,7 @@ import { ShoppingCartPage } from "../../pages/shopping_cart_page";
 
 import { loginAsStandardUser } from "../../helpers/standardUserLogin";
 import { Products } from "../products.strings";
+import { HamburgerMenuPage } from "../../pages/hamburger_menu";
 
 test.describe("Item selection and cart management", () => {
   let loginPage: LoginPage;
@@ -97,24 +98,40 @@ test.describe("Item selection and cart management", () => {
     expect(numericPriceHilo).toEqual(sortedPricesHilo);
   });
 });
+//known bug - the error user cannot remove item from the product page, remove button stays visible
+test.fail(
+  "the error user cannot remove item from the product page",
+  async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+    const hamburgerPage = new HamburgerMenuPage(page);
 
-test("the error user cannot remove item from the product page", async ({
-  page,
-}) => {
-  const loginPage = new LoginPage(page);
-  const inventoryPage = new InventoryPage(page);
+    await loginPage.goto();
+    await loginPage.isVisible();
+    await loginPage.login("error_user", "secret_sauce");
 
-  await loginPage.goto();
-  await loginPage.isVisible();
-  await loginPage.login("error_user", "secret_sauce");
-  await expect(page).toHaveTitle("Swag Labs");
-  await expect(page).toHaveURL("https://www.saucedemo.com/inventory.html");
-  await expect(inventoryPage.inventorySingleCard).toHaveCount(6);
-  await expect(inventoryPage.removeButton).toBeHidden();
-  await expect(inventoryPage.addToCartButton).toBeVisible();
-  await inventoryPage.addItemToCart();
-  await expect(inventoryPage.removeButton).toBeVisible();
-  await inventoryPage.removeButton.click();
-  await expect(inventoryPage.removeButton).toBeVisible();
-  await expect(inventoryPage.shoppingCartBadge).toHaveText("1");
-});
+    await expect(page).toHaveTitle("Swag Labs");
+    await expect(page).toHaveURL("https://www.saucedemo.com/inventory.html");
+    await expect(inventoryPage.inventorySingleCard).toHaveCount(6);
+
+    await expect(inventoryPage.removeButton).toBeHidden();
+    await expect(inventoryPage.addToCartButton).toBeVisible();
+
+    await inventoryPage.addItemToCart();
+    await expect(inventoryPage.removeButton).toBeVisible();
+    await expect(inventoryPage.shoppingCartBadge).toHaveText("1");
+
+    await inventoryPage.removeButton.click();
+    await expect(inventoryPage.removeButton).toBeHidden();
+    await expect(inventoryPage.shoppingCartBadge).toBeHidden();
+
+    await hamburgerPage.openHamburgerMenu();
+    await expect(hamburgerPage.resetAppStateButton).toBeVisible();
+    await hamburgerPage.resetAppState();
+
+    await expect(inventoryPage.removeButton).toBeHidden();
+    await expect(inventoryPage.shoppingCartBadge).toBeHidden();
+  }
+);
+
+//write a test: performence user con login

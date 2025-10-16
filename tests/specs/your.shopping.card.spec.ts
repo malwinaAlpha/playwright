@@ -4,6 +4,9 @@ import { InventoryPage } from "../../pages/inventory_page";
 import { ShoppingCartPage } from "../../pages/shopping_cart_page";
 import { Products } from "../products.strings";
 import { loginAsStandardUser } from "../../helpers/standardUserLogin";
+import { loginAsErrorUser } from "../../helpers/errorUserLogin";
+import { fillCheckoutForm } from "../../helpers/fillCheckoutForm";
+import { CheckOutPage } from "../../pages/check_out_page";
 
 test.describe("Users interactions on the inventory page", () => {
   let loginPage: LoginPage;
@@ -55,3 +58,23 @@ test.describe("Users interactions on the inventory page", () => {
     await expect(page.getByText(Products.backpack_product)).toBeVisible();
   });
 });
+
+//known bug - error user can not finish the shopping, no checkout complete header
+test.fail(
+  "Error user attempts to complete the shopping, cannot finish checkout",
+  async ({ page }) => {
+    const inventoryPage = new InventoryPage(page);
+    const shoppingCart = new ShoppingCartPage(page);
+    const checkOutPage = new CheckOutPage(page);
+
+    await loginAsErrorUser(page);
+    await expect(page).toHaveTitle("Swag Labs");
+    await inventoryPage.addItemToCart();
+    await expect(inventoryPage.shoppingCartBadge).toHaveText("1");
+    await inventoryPage.goToShoppingCart();
+    await shoppingCart.clickCheckoutButton();
+    await fillCheckoutForm(page, "Malwina", "Kowalczyk", "00-000");
+    await checkOutPage.clickFinishButton();
+    await checkOutPage.getCheckoutCompleteHeader();
+  }
+);

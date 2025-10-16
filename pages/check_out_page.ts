@@ -48,7 +48,9 @@ export class CheckOutPage {
     await this.finishButton.click();
   }
   async getCheckoutCompleteHeader() {
-    return this.page.getByText("Checkout: Complete!");
+    await expect(this.page.locator(".complete-header")).toHaveText(
+      "Thank you for your order!"
+    );
   }
 
   async clickBackHomeButton() {
