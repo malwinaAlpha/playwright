@@ -7,16 +7,19 @@ import { loginAsStandardUser } from "../../helpers/standardUserLogin";
 import { loginAsErrorUser } from "../../helpers/errorUserLogin";
 import { fillCheckoutForm } from "../../helpers/fillCheckoutForm";
 import { CheckOutPage } from "../../pages/check_out_page";
+import { HamburgerMenuPage } from "../../pages/hamburger_menu";
 
 test.describe("Users interactions on the inventory page", () => {
   let loginPage: LoginPage;
   let inventoryPage: InventoryPage;
   let shoppingCart: ShoppingCartPage;
+  let hamburgerMenuPage: HamburgerMenuPage;
 
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);
     inventoryPage = new InventoryPage(page);
     shoppingCart = new ShoppingCartPage(page);
+    hamburgerMenuPage = new HamburgerMenuPage(page);
 
     await loginAsStandardUser(page);
     await expect(inventoryPage.inventorySingleCard).toHaveCount(6);
@@ -57,24 +60,44 @@ test.describe("Users interactions on the inventory page", () => {
     await shoppingCart.clickContinueShoppingButton();
     await expect(page.getByText(Products.backpack_product)).toBeVisible();
   });
-});
 
-//known bug - error user can not finish the shopping, no checkout complete header
-test.fail(
-  "Error user attempts to complete the shopping, cannot finish checkout",
-  async ({ page }) => {
-    const inventoryPage = new InventoryPage(page);
-    const shoppingCart = new ShoppingCartPage(page);
-    const checkOutPage = new CheckOutPage(page);
-
-    await loginAsErrorUser(page);
-    await expect(page).toHaveTitle("Swag Labs");
+  test("cart state persists after page reload", async ({ page }) => {
+    await expect(page.getByText(Products.backpack_product)).toBeVisible();
     await inventoryPage.addItemToCart();
     await expect(inventoryPage.shoppingCartBadge).toHaveText("1");
-    await inventoryPage.goToShoppingCart();
-    await shoppingCart.clickCheckoutButton();
-    await fillCheckoutForm(page, "Malwina", "Kowalczyk", "00-000");
-    await checkOutPage.clickFinishButton();
-    await checkOutPage.getCheckoutCompleteHeader();
-  }
-);
+
+    await page.reload();
+    await expect(inventoryPage.shoppingCartBadge).toHaveText("1");
+  });
+
+  test("cart stare persists after logout and login", async ({ page }) => {
+    await expect(page.getByText(Products.backpack_product)).toBeVisible();
+    await inventoryPage.addItemToCart();
+    await expect(inventoryPage.shoppingCartBadge).toHaveText("1");
+
+    await hamburgerMenuPage.openHamburgerMenu();
+    await hamburgerMenuPage.clickLogout();
+    await loginAsStandardUser(page);
+    await expect(inventoryPage.shoppingCartBadge).toHaveText("1");
+  });
+
+  //known bug - error user can not finish the shopping, no checkout complete header
+  test.fail(
+    "Error user attempts to complete the shopping, cannot finish checkout",
+    async ({ page }) => {
+      const inventoryPage = new InventoryPage(page);
+      const shoppingCart = new ShoppingCartPage(page);
+      const checkOutPage = new CheckOutPage(page);
+
+      await loginAsErrorUser(page);
+      await expect(page).toHaveTitle("Swag Labs");
+      await inventoryPage.addItemToCart();
+      await expect(inventoryPage.shoppingCartBadge).toHaveText("1");
+      await inventoryPage.goToShoppingCart();
+      await shoppingCart.clickCheckoutButton();
+      await fillCheckoutForm(page, "Malwina", "Kowalczyk", "00-000");
+      await checkOutPage.clickFinishButton();
+      await checkOutPage.getCheckoutCompleteHeader();
+    }
+  );
+});

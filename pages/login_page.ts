@@ -3,12 +3,12 @@ import { expect, Page, Locator } from "@playwright/test"; //import { test, expec
 export class LoginPage {
   readonly page: Page;
   readonly loginButton: Locator;
-  readonly errorMesaageOutput: Locator;
+  readonly errorMessageOutput: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.loginButton = page.locator("#login-button");
-    this.errorMesaageOutput = page.locator(".error-message-container");
+    this.errorMessageOutput = page.locator(".error-message-container");
   }
 
   async goto() {
