@@ -35,7 +35,7 @@ test.describe("Users interactions with the menu", () => {
     await expect(inventoryPage.shoppingCartBadge).toBeHidden();
   });
 
-  test("the user can logout", async ({ page }) => {
+  test("the user can logout", async ({}) => {
     await hamburgerMenuPage.openHamburgerMenu();
     await hamburgerMenuPage.clickLogout();
     await loginPage.isVisible();

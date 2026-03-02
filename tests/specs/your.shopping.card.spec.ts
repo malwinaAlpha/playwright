@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { LoginPage } from "../../pages/login_page"; //import { test, expect } from '@playwright/test';
+import { LoginPage } from "../../pages/login_page";
 import { InventoryPage } from "../../pages/inventory_page";
 import { ShoppingCartPage } from "../../pages/shopping_cart_page";
 import { Products } from "../products.strings";
@@ -65,6 +65,7 @@ test.describe("Users interactions on the inventory page", () => {
     await expect(page.getByText(Products.backpack_product)).toBeVisible();
     await inventoryPage.addItemToCart();
     await expect(inventoryPage.shoppingCartBadge).toHaveText("1");
+    await page.waitForTimeout(1000);
 
     await page.reload();
     await expect(inventoryPage.shoppingCartBadge).toHaveText("1");
@@ -98,6 +99,6 @@ test.describe("Users interactions on the inventory page", () => {
       await fillCheckoutForm(page, "Malwina", "Kowalczyk", "00-000");
       await checkOutPage.clickFinishButton();
       await checkOutPage.getCheckoutCompleteHeader();
-    }
+    },
   );
 });

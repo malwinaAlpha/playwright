@@ -23,7 +23,7 @@ test("the locked out user cannot log in - error message is displayed", async ({
   await loginPage.isVisible();
   await loginPage.login("locked_out_user", "secret_sauce");
   await expect(loginPage.errorMessageOutput).toHaveText(
-    "Epic sadface: Sorry, this user has been locked out."
+    "Epic sadface: Sorry, this user has been locked out.",
   );
 });
 
@@ -40,7 +40,7 @@ test.fail(
     await loginPage.isVisible();
     await loginPage.login("problem_user", "secret_sauce");
     await inventoryPage.verifyNoDuplicateImages();
-  }
+  },
 );
 
 test("the standard user tries to login without password - error message is displayed", async ({
@@ -52,7 +52,7 @@ test("the standard user tries to login without password - error message is displ
   await loginPage.isVisible();
   await loginPage.login("standard_user", "");
   await expect(loginPage.errorMessageOutput).toHaveText(
-    "Epic sadface: Password is required"
+    "Epic sadface: Password is required",
   );
 });
 
@@ -65,8 +65,19 @@ test("the standard user tries to login with incorrect password- error message is
   await loginPage.isVisible();
   await loginPage.login("standard_user", "incorrect_password");
   await expect(loginPage.errorMessageOutput).toHaveText(
-    "Epic sadface: Username and password do not match any user in this service"
+    "Epic sadface: Username and password do not match any user in this service",
   );
 });
 
-//write a test: performence user con login
+test("standard user tries to login with space in username - error message is displayed", async ({
+  page,
+}) => {
+  const loginPage = new LoginPage(page);
+
+  await loginPage.goto();
+  await loginPage.isVisible();
+  await loginPage.login(" standard_user", "secret_sauce");
+  await expect(loginPage.errorMessageOutput).toHaveText(
+    "Epic sadface: Username and password do not match any user in this service",
+  );
+});
