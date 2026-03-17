@@ -19,7 +19,7 @@ export class ShoppingCartPage {
   }
   async verifyItemRemoved(itemName: string) {
     await expect(
-      this.page.locator(`.cart_item:has-text("${itemName}")`)
+      this.page.locator(`.cart_item:has-text("${itemName}")`),
     ).toHaveCount(0); //add here notsure hot to do it
   }
 

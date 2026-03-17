@@ -1,11 +1,11 @@
 import { test, expect } from "@playwright/test";
-import { LoginPage } from "../../pages/login_page"; //import { test, expect } from '@playwright/test';
+import { LoginPage } from "../../pages/login_page";
 import { InventoryPage } from "../../pages/inventory_page";
 import { ShoppingCartPage } from "../../pages/shopping_cart_page";
-
 import { loginAsStandardUser } from "../../helpers/standardUserLogin";
 import { Products } from "../products.strings";
 import { HamburgerMenuPage } from "../../pages/hamburger_menu";
+import { Credentials } from "../../data/credentials";
 
 test.describe("Item selection and cart management", () => {
   let loginPage: LoginPage;
@@ -108,7 +108,7 @@ test.fail(
 
     await loginPage.goto();
     await loginPage.isVisible();
-    await loginPage.login("error_user", "secret_sauce");
+    await loginPage.login(Credentials.errorUser.username, Credentials.errorUser.password);
 
     await expect(page).toHaveTitle("Swag Labs");
     await expect(page).toHaveURL("https://www.saucedemo.com/inventory.html");
