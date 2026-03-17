@@ -1,7 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { loginAsStandardUser } from "../../helpers/standardUserLogin";
 import { loginAsPerformenceUser } from "../../helpers/performenceUserLogin";
-import { LoginPage } from "../../pages/login_page";
 import { InventoryPage } from "../../pages/inventory_page";
 import { ShoppingCartPage } from "../../pages/shopping_cart_page";
 

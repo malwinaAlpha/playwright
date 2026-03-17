@@ -29,14 +29,14 @@ export class InventoryPage {
     this.addToCartButton = page.locator("#add-to-cart-sauce-labs-backpack");
     this.addToCartButton2 = page.locator("#add-to-cart-sauce-labs-bike-light");
     this.addToCartButton3 = page.locator(
-      "#add-to-cart-sauce-labs-bolt-t-shirt"
+      "#add-to-cart-sauce-labs-bolt-t-shirt",
     );
     this.addToCartButton4 = page.locator(
-      "#add-to-cart-sauce-labs-fleece-jacket"
+      "#add-to-cart-sauce-labs-fleece-jacket",
     );
     this.addToCartButton5 = page.locator("#add-to-cart-sauce-labs-onesie");
     this.addToCartButton6 = page.locator(
-      "#add-to-cart-test.allthethings()-t-shirt-(red)"
+      "#add-to-cart-test.allthethings()-t-shirt-(red)",
     );
     this.shoppingCart = page.locator(".shopping_cart_link");
     this.shoppingCartBadge = page.locator(".shopping_cart_badge");
@@ -44,13 +44,13 @@ export class InventoryPage {
     this.removeButton = page.locator("#remove-sauce-labs-backpack");
     this.removebuttonBikeLight = page.locator("#remove-sauce-labs-bike-light");
     this.removebuttonBoltTshirt = page.locator(
-      "#remove-sauce-labs-bolt-t-shirt"
+      "#remove-sauce-labs-bolt-t-shirt",
     );
     this.sortDropdown = page.locator('[data-test="product-sort-container"]'); // sort <select> dropdown
     this.productNames = page.locator(".inventory_item_name"); // all product name elements
     this.activeSortOption = page.locator(".active_option");
     this.sortOptions = page.locator(
-      '[data-test="product_sort_container"] option'
+      '[data-test="product_sort_container"] option',
     ); // all <option> elements
     this.productImages = page.locator(".inventory_item_img");
     this.productPrices = page.locator(".inventory_item_price"); // all product price elements
@@ -120,7 +120,7 @@ export class InventoryPage {
 
   async verifyNoDuplicateImages() {
     const srcList = await this.productImages.evaluateAll((images) =>
-      images.map((img) => (img as HTMLImageElement).src)
+      images.map((img) => (img as HTMLImageElement).src),
     );
     const unique = new Set(srcList);
     if (unique.size !== srcList.length) {

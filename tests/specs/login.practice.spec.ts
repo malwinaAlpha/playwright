@@ -1,14 +1,15 @@
 import { test, expect } from "@playwright/test";
-import { LoginPage } from "../../pages/login_page"; //import { test, expect } from '@playwright/test';
+import { LoginPage } from "../../pages/login_page";
 import { InventoryPage } from "../../pages/inventory_page";
 import { loginAsStandardUser } from "../../helpers/standardUserLogin";
+import { Credentials } from "../../data/credentials";
 
 test("the standard user can login and does not see duplicates", async ({
   page,
 }) => {
   const inventoryPage = new InventoryPage(page);
 
-  await loginAsStandardUser(page); //helper function usage
+  await loginAsStandardUser(page);
   await expect(page).toHaveTitle("Swag Labs");
   await expect(page).toHaveURL("https://www.saucedemo.com/inventory.html");
   await expect(inventoryPage.inventorySingleCard).toHaveCount(6);
@@ -21,7 +22,7 @@ test("the locked out user cannot log in - error message is displayed", async ({
 
   await loginPage.goto();
   await loginPage.isVisible();
-  await loginPage.login("locked_out_user", "secret_sauce");
+  await loginPage.login(Credentials.lockedOutUser.username, Credentials.lockedOutUser.password);
   await expect(loginPage.errorMessageOutput).toHaveText(
     "Epic sadface: Sorry, this user has been locked out.",
   );
@@ -38,7 +39,7 @@ test.fail(
 
     await loginPage.goto();
     await loginPage.isVisible();
-    await loginPage.login("problem_user", "secret_sauce");
+    await loginPage.login(Credentials.problemUser.username, Credentials.problemUser.password);
     await inventoryPage.verifyNoDuplicateImages();
   },
 );
@@ -50,7 +51,7 @@ test("the standard user tries to login without password - error message is displ
 
   await loginPage.goto();
   await loginPage.isVisible();
-  await loginPage.login("standard_user", "");
+  await loginPage.login(Credentials.standardUser.username, Credentials.invalid.noPassword);
   await expect(loginPage.errorMessageOutput).toHaveText(
     "Epic sadface: Password is required",
   );
@@ -63,7 +64,7 @@ test("the standard user tries to login with incorrect password- error message is
 
   await loginPage.goto();
   await loginPage.isVisible();
-  await loginPage.login("standard_user", "incorrect_password");
+  await loginPage.login(Credentials.standardUser.username, Credentials.invalid.wrongPassword);
   await expect(loginPage.errorMessageOutput).toHaveText(
     "Epic sadface: Username and password do not match any user in this service",
   );
@@ -76,7 +77,7 @@ test("standard user tries to login with space in username - error message is dis
 
   await loginPage.goto();
   await loginPage.isVisible();
-  await loginPage.login(" standard_user", "secret_sauce");
+  await loginPage.login(Credentials.invalid.usernameWithSpace, Credentials.standardUser.password);
   await expect(loginPage.errorMessageOutput).toHaveText(
     "Epic sadface: Username and password do not match any user in this service",
   );

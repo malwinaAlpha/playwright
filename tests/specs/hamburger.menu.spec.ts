@@ -1,11 +1,11 @@
 import { test, expect } from "@playwright/test";
-import { LoginPage } from "../../pages/login_page"; //import { test, expect } from '@playwright/test';
+import { LoginPage } from "../../pages/login_page";
 import { InventoryPage } from "../../pages/inventory_page";
-
 import { HamburgerMenuPage } from "../../pages/hamburger_menu";
 import { Products } from "../products.strings";
 import { loginAsStandardUser } from "../../helpers/standardUserLogin";
 import { ShoppingCartPage } from "../../pages/shopping_cart_page";
+import { Credentials } from "../../data/credentials";
 
 test.describe("Users interactions with the menu", () => {
   let loginPage: LoginPage;
@@ -46,7 +46,7 @@ test.describe("Users interactions with the menu", () => {
     const hamburgerMenuPage = new HamburgerMenuPage(page);
 
     await loginPage.goto();
-    await loginPage.login("standard_user", "secret_sauce");
+    await loginPage.login(Credentials.standardUser.username, Credentials.standardUser.password);
     await loginPage.isVisible();
 
     await hamburgerMenuPage.openHamburgerMenu();
